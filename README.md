@@ -10,6 +10,7 @@ Sistema web desarrollado con **Django** para la gestión de operaciones bancaria
 - [🚀 Funcionalidades Principales](#-funcionalidades-principales)
 - [🛠️ Tecnologías Utilizadas](#️-tecnologías-utilizadas)
 - [⚙️ Instalación y Ejecución](#️-instalación-y-ejecución)
+- [🌐 Despliegue en Render](#-despliegue-en-render)
 - [📁 Estructura del Proyecto](#-estructura-del-proyecto)
 
 ---
@@ -36,11 +37,13 @@ Este proyecto tiene como propósito simular un sistema bancario básico que perm
 - **Lenguaje:** Python 3.x
 - **Framework:** Django
 - **Base de datos:** PostgreSQL 
-- **Estilos:** Bootstrap
+- **Frontend:** Tailwind CSS v4 (CDN)
+- **Servidor:** Gunicorn
 - **Otros:** 
   - Django Admin
   - Django ORM
   - Virtualenv
+  - WhiteNoise (servir archivos estáticos)
 
 ---
 
@@ -51,9 +54,10 @@ Sigue estos pasos para correr el proyecto localmente:
 ### 1. Clona el repositorio
 
 ```bash
-git clone https://github.com/syderkkk/sistema-bancario.git
-cd sistema-bancario
+git clone https://github.com/gerardo-pz/sistema-bancario-final.git
+cd sistema-bancario-final
 ```
+
 ### 2. Crea un entorno virtual
 
 ```bash
@@ -68,28 +72,77 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 4. Ejecuta las migraciones
+### 4. Configura la base de datos PostgreSQL
+
+Asegúrate de tener PostgreSQL instalado y crea una base de datos llamada `django_sistema_bancario`.
+
+### 5. Ejecuta las migraciones
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-### 5. Crea un superusuario (opcional)
+### 6. Crea un superusuario (opcional)
 
 ```bash
 python manage.py createsuperuser
 ```
 
-### 6. Ejecuta el servidor
+### 7. Ejecuta el servidor
 
 ```bash
 python manage.py runserver
 ```
 
+### 8. Accede a la aplicación
+
+Abre tu navegador y ve a `http://localhost:8000`
+
+---
+
+## 🌐 Despliegue en Render
+
+### Opción 1: Despliegue Automático (Recomendado)
+
+1. **Fork o clona este repositorio** en tu cuenta de GitHub
+
+2. **Ve a [Render.com](https://render.com)** y crea una cuenta
+
+3. **Crea un nuevo Web Service**:
+   - Conecta tu repositorio de GitHub
+   - Selecciona el repositorio `sistema-bancario-final`
+   - Render detectará automáticamente que es un proyecto Django
+
+4. **Configura las variables de entorno**:
+   ```
+   SECRET_KEY = [generar una clave secreta]
+   DEBUG = false
+   ALLOWED_HOSTS = .onrender.com
+   DATABASE_URL = [se configurará automáticamente]
+   ```
+
+5. **Haz clic en "Create Web Service"**
+
+### Opción 2: Despliegue Manual
+
+1. **Sube los cambios a GitHub**:
+   ```bash
+   git add .
+   git commit -m "Configuración para Render"
+   git push origin main
+   ```
+
+2. **En Render, crea un nuevo Web Service** con estas configuraciones:
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn sistema_bancario.wsgi:application`
+   - **Python Version**: 3.11.0
+
+3. **Configura la base de datos PostgreSQL** en Render
+
 ### 📁 Estructura del Proyecto
 ```text
-sistema-bancario/
+sistema-bancario-final/
 ├── auditoria/         # Módulo de auditoría de operaciones
 ├── cuentas/           # Lógica para cuentas bancarias
 ├── solicitudes/       # Gestión de solicitudes entre usuarios/cuentas
@@ -98,5 +151,25 @@ sistema-bancario/
 ├── utils/             # Implementaciones de estructuras de datos
 ├── sistema_bancario/  # Configuración global del proyecto Django
 ├── manage.py          # Script de gestión del proyecto
-└── requirements.txt   # Lista de dependencias
+├── requirements.txt   # Lista de dependencias
+├── render.yaml        # Configuración para Render
+└── build.sh           # Script de build para Render
 ```
+
+---
+
+## 🎨 Características del Frontend
+
+- **Tailwind CSS v4**: Framework CSS moderno para un diseño responsive y atractivo
+- **Diseño Responsive**: Se adapta a dispositivos móviles, tablets y desktop
+- **Interfaz Moderna**: Componentes con efectos hover, transiciones suaves y sombras
+- **Navegación Intuitiva**: Menú de navegación con diseño hamburguesa para móviles
+
+---
+
+## 🔧 Archivos de Configuración
+
+- `render.yaml`: Configuración automática para Render
+- `build.sh`: Script de construcción para el despliegue
+- `requirements.txt`: Dependencias de Python actualizadas
+- `sistema_bancario/settings.py`: Configuración optimizada para producción
